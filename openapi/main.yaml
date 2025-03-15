@@ -1,0 +1,386 @@
+openapi: 3.0.0
+info:
+  title: '単語辞書API'
+  version: '1.0.0'
+  description: '単語辞書API'
+  contact:
+    name: 'contact'
+    url: 'https://github.com/lobmto/lobmto-nestjs-example.git'
+
+servers:
+  - url: 'http://localhost:8000'
+    description: 'ローカル開発環境'
+
+tags:
+  - name: 'Health'
+    description: 'ヘルスチェック'
+  - name: 'Word'
+    description: '単語'
+  - name: 'Tag'
+    description: 'タグ'
+
+paths:
+  /health:
+    get:
+      tags:
+        - 'Health'
+      operationId: 'getHealth'
+      summary: 'ヘルスチェックAPI'
+      description: 'サービスの稼働状態を返却する'
+      responses:
+        '200':
+          description: '正常'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: ['UP']
+                    example: 'UP'
+                required:
+                  - status
+  /words:
+    get:
+      tags:
+        - 'Word'
+      operationId: 'getWordList'
+      summary: '単語一覧取得API'
+      description: '単語の一覧を取得する'
+      responses:
+        '200':
+          description: '正常'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  words:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          $ref: '#/components/schemas/id'
+                        word:
+                          $ref: '#/components/schemas/word'
+                        meaningList:
+                          $ref: '#/components/schemas/meaningList'
+                        tagList:
+                          $ref: '#/components/schemas/tagList'
+                      required:
+                        - id
+                        - word
+                        - meaningList
+                        - tagList
+                required:
+                  - words
+    post:
+      tags:
+        - 'Word'
+      operationId: 'registerWord'
+      summary: '単語登録API'
+      description: '新しい単語を追加する'
+      requestBody:
+        description: '追加する単語'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  $ref: '#/components/schemas/word'
+                meaningList:
+                  $ref: '#/components/schemas/meaningList'
+                tagIdList:
+                  $ref: '#/components/schemas/tagIdList'
+              required:
+                - word
+                - meaningList
+                - tagIdList
+      responses:
+        '201':
+          description: '正常'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  word:
+                    $ref: '#/components/schemas/word'
+                  meaningList:
+                    $ref: '#/components/schemas/meaningList'
+                  tagList:
+                    $ref: '#/components/schemas/tagList'
+                required:
+                  - id
+                  - word
+                  - meaningList
+                  - tagList
+  /words/{id}:
+    get:
+      tags:
+        - 'Word'
+      operationId: 'getWord'
+      summary: '単語詳細取得API'
+      description: '単語IDを指定して、単語の詳細情報を取得する'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/id'
+      responses:
+        '200':
+          description: '正常'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  word:
+                    $ref: '#/components/schemas/word'
+                  meaningList:
+                    $ref: '#/components/schemas/meaningList'
+                  tagList:
+                    $ref: '#/components/schemas/tagList'
+                required:
+                  - id
+                  - word
+                  - meaningList
+                  - tagList
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+    patch:
+      tags:
+        - 'Word'
+      operationId: 'updateWord'
+      summary: '単語更新API'
+      description: '既存の単語を更新する'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/id'
+      requestBody:
+        description: '更新する単語の情報'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  $ref: '#/components/schemas/word'
+                meaningList:
+                  $ref: '#/components/schemas/meaningList'
+                tagIdList:
+                  $ref: '#/components/schemas/tagIdList'
+      responses:
+        '204':
+          description: '正常'
+    delete:
+      tags:
+        - 'Word'
+      operationId: 'deleteWord'
+      summary: '単語削除API'
+      description: '単語IDを指定して、単語を削除する'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/id'
+      responses:
+        '204':
+          description: '正常'
+        '404':
+          description: 'Not Found'
+  /tags:
+    get:
+      tags:
+        - 'Tag'
+      operationId: 'getTagList'
+      summary: 'タグ一覧取得API'
+      description: 'タグの一覧を取得する'
+      responses:
+        '200':
+          description: '正常'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          $ref: '#/components/schemas/id'
+                        name:
+                          $ref: '#/components/schemas/tagName'
+                      required:
+                        - id
+                        - name
+                required:
+                  - tags
+    post:
+      tags:
+        - 'Tag'
+      operationId: 'registerTag'
+      summary: 'タグ登録API'
+      description: '新しいタグを追加する'
+      requestBody:
+        description: '追加するタグ'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: '#/components/schemas/tagName'
+              required:
+                - name
+      responses:
+        '201':
+          description: '正常'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  name:
+                    $ref: '#/components/schemas/tagName'
+                required:
+                  - id
+                  - name
+  /tags/{id}:
+    get:
+      tags:
+        - 'Tag'
+      operationId: 'getTag'
+      summary: 'タグ詳細取得API'
+      description: 'タグIDを指定して、タグの詳細情報を取得する'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/id'
+      responses:
+        '200':
+          description: '正常'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  name:
+                    $ref: '#/components/schemas/tagName'
+                required:
+                  - id
+                  - name
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+    patch:
+      tags:
+        - 'Tag'
+      operationId: 'updateTag'
+      summary: 'タグ更新API'
+      description: '既存のタグを更新する'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/id'
+      requestBody:
+        description: '更新するタグの情報'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: '#/components/schemas/tagName'
+      responses:
+        '204':
+          description: '正常'
+    delete:
+      tags:
+        - 'Tag'
+      operationId: 'deleteTag'
+      summary: 'タグ削除API'
+      description: 'タグIDを指定して、タグを削除する'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/id'
+      responses:
+        '204':
+          description: '正常'
+        '404':
+          description: 'Not Found'
+
+components:
+  schemas:
+    id:
+      type: string
+      format: uuid
+    word:
+      type: string
+      example: 'example'
+    meaning:
+      type: string
+      example: '例'
+    meaningList:
+      type: array
+      items:
+        type: object
+        properties:
+          meaning:
+            $ref: '#/components/schemas/meaning'
+        required:
+          - meaning
+    tagName:
+      type: string
+      example: 'programming'
+    tagIdList:
+      type: array
+      maxItems: 5
+      items:
+        $ref: '#/components/schemas/id'
+    tagList:
+      type: array
+      maxItems: 5
+      items:
+        type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/id'
+        required:
+          - id
