@@ -39,32 +39,7 @@ paths:
       description: '単語の一覧を取得する'
       responses:
         '200':
-          description: '正常'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  words:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          $ref: '#/components/schemas/id'
-                        word:
-                          $ref: '#/components/schemas/word'
-                        meaningList:
-                          $ref: '#/components/schemas/meaningList'
-                        tagList:
-                          $ref: '#/components/schemas/tagList'
-                      required:
-                        - id
-                        - word
-                        - meaningList
-                        - tagList
-                required:
-                  - words
+          $ref: '#/components/responses/GetWordListResponse'
     post:
       tags:
         - 'Word'
@@ -72,44 +47,10 @@ paths:
       summary: '単語登録API'
       description: '新しい単語を追加する'
       requestBody:
-        description: '追加する単語'
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                word:
-                  $ref: '#/components/schemas/word'
-                meaningList:
-                  $ref: '#/components/schemas/meaningList'
-                tagIdList:
-                  $ref: '#/components/schemas/tagIdList'
-              required:
-                - word
-                - meaningList
-                - tagIdList
+        $ref: '#/components/requestBodies/RegisterWordRequest'
       responses:
         '201':
-          description: '正常'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    $ref: '#/components/schemas/id'
-                  word:
-                    $ref: '#/components/schemas/word'
-                  meaningList:
-                    $ref: '#/components/schemas/meaningList'
-                  tagList:
-                    $ref: '#/components/schemas/tagList'
-                required:
-                  - id
-                  - word
-                  - meaningList
-                  - tagList
+          $ref: '#/components/responses/RegisterWordResponse'
   /words/{id}:
     get:
       tags:
@@ -125,31 +66,9 @@ paths:
             $ref: '#/components/schemas/id'
       responses:
         '200':
-          description: '正常'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    $ref: '#/components/schemas/id'
-                  word:
-                    $ref: '#/components/schemas/word'
-                  meaningList:
-                    $ref: '#/components/schemas/meaningList'
-                  tagList:
-                    $ref: '#/components/schemas/tagList'
-                required:
-                  - id
-                  - word
-                  - meaningList
-                  - tagList
+          $ref: '#/components/responses/GetWordResponse'
         '404':
-          description: 'Not Found'
-          content:
-            application/json:
-              schema:
-                type: object
+          $ref: '#/components/responses/NotFoundResponse'
     patch:
       tags:
         - 'Word'
@@ -163,22 +82,10 @@ paths:
           schema:
             $ref: '#/components/schemas/id'
       requestBody:
-        description: '更新する単語の情報'
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                word:
-                  $ref: '#/components/schemas/word'
-                meaningList:
-                  $ref: '#/components/schemas/meaningList'
-                tagIdList:
-                  $ref: '#/components/schemas/tagIdList'
+        $ref: '#/components/requestBodies/UpdateWordRequest'
       responses:
         '204':
-          description: '正常'
+          $ref: '#/components/responses/NoContentResponse'
     delete:
       tags:
         - 'Word'
@@ -377,6 +284,40 @@ components:
       type: string
       enum: ['UP', 'DOWN']
 
+  requestBodies:
+    RegisterWordRequest:
+      description: '追加する単語'
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              word:
+                $ref: '#/components/schemas/word'
+              meaningList:
+                $ref: '#/components/schemas/meaningList'
+              tagIdList:
+                $ref: '#/components/schemas/tagIdList'
+            required:
+              - word
+              - meaningList
+              - tagIdList
+    UpdateWordRequest:
+      description: '更新する単語の情報'
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              word:
+                $ref: '#/components/schemas/word'
+              meaningList:
+                $ref: '#/components/schemas/meaningList'
+              tagIdList:
+                $ref: '#/components/schemas/tagIdList'
+
   responses:
     GetHealthResponse:
       description: 'ヘルスチェックの正常応答'
@@ -389,3 +330,78 @@ components:
                 $ref: '#/components/schemas/HealthStatus'
             required:
               - status
+    GetWordListResponse:
+      description: '正常'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              words:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/id'
+                    word:
+                      $ref: '#/components/schemas/word'
+                    meaningList:
+                      $ref: '#/components/schemas/meaningList'
+                    tagList:
+                      $ref: '#/components/schemas/tagList'
+                  required:
+                    - id
+                    - word
+                    - meaningList
+                    - tagList
+            required:
+              - words
+    RegisterWordResponse:
+      description: '正常'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                $ref: '#/components/schemas/id'
+              word:
+                $ref: '#/components/schemas/word'
+              meaningList:
+                $ref: '#/components/schemas/meaningList'
+              tagList:
+                $ref: '#/components/schemas/tagList'
+            required:
+              - id
+              - word
+              - meaningList
+              - tagList
+    GetWordResponse:
+      description: '正常'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                $ref: '#/components/schemas/id'
+              word:
+                $ref: '#/components/schemas/word'
+              meaningList:
+                $ref: '#/components/schemas/meaningList'
+              tagList:
+                $ref: '#/components/schemas/tagList'
+            required:
+              - id
+              - word
+              - meaningList
+              - tagList
+    NotFoundResponse:
+      description: 'Not Found'
+      content:
+        application/json:
+          schema:
+            type: object
+    NoContentResponse:
+      description: '正常'
