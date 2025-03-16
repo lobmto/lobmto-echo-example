@@ -29,11 +29,7 @@ paths:
       description: 'サービスの稼働状態を返却する'
       responses:
         '200':
-          description: '正常'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetHealthResponse'
+          $ref: '#/components/responses/GetHealthResponse'
   /words:
     get:
       tags:
@@ -377,12 +373,18 @@ components:
             $ref: '#/components/schemas/id'
         required:
           - id
+
+  responses:
     GetHealthResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum: ['UP']
-          example: 'UP'
-      required:
-        - status
+      description: 'ヘルスチェックの正常応答'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ['UP']
+                example: 'UP'
+            required:
+              - status
