@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"lobmto-echo-example/responses"
+	"lobmto-echo-example/responses/health"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -14,5 +14,5 @@ func NewHealthController() *HealthController {
 }
 
 func (h *HealthController) Check(c echo.Context) error {
-	return c.JSON(http.StatusOK, responses.NewHealthResponse())
+	return c.JSON(http.StatusOK, health.NewGetHealthResponse())
 }
