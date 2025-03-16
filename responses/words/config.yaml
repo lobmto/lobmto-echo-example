@@ -1,0 +1,8 @@
+package: words
+output: words.gen.go
+generate:
+  models: true
+output-options:
+  include-tags:
+    - Word
+  nullable-type: true
