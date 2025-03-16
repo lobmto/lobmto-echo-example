@@ -33,14 +33,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum: ['UP']
-                    example: 'UP'
-                required:
-                  - status
+                $ref: '#/components/schemas/GetHealthResponse'
   /words:
     get:
       tags:
@@ -384,3 +377,12 @@ components:
             $ref: '#/components/schemas/id'
         required:
           - id
+    GetHealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ['UP']
+          example: 'UP'
+      required:
+        - status
