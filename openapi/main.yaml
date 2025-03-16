@@ -373,6 +373,9 @@ components:
             $ref: '#/components/schemas/id'
         required:
           - id
+    HealthStatus:
+      type: string
+      enum: ['UP', 'DOWN']
 
   responses:
     GetHealthResponse:
@@ -383,8 +386,6 @@ components:
             type: object
             properties:
               status:
-                type: string
-                enum: ['UP']
-                example: 'UP'
+                $ref: '#/components/schemas/HealthStatus'
             required:
               - status
