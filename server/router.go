@@ -12,5 +12,8 @@ func NewRouter() *echo.Echo {
 	healthController := controllers.NewHealthController()
 	e.GET("/health", healthController.Check)
 
+	wordController := controllers.NewWordController()
+	e.GET("/words/:id", wordController.GetWord)
+
 	return e
 }
