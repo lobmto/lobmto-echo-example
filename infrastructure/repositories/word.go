@@ -1,9 +1,8 @@
 package repositories
 
 import (
-	"lobmto-echo-example/domain/models"
 	"lobmto-echo-example/domain/repositories"
-	"lobmto-echo-example/infrastructure/entity"
+	"lobmto-echo-example/infrastructure/models"
 	"lobmto-echo-example/model/words"
 
 	"gorm.io/gorm"
@@ -17,17 +16,20 @@ func NewWordRepository(db *gorm.DB) repositories.WordRepository {
 	return wordRepository{db: db}
 }
 
-func (r wordRepository) FindByID(id words.ID) (models.Word, error) {
-	var e entity.Word
+func (r wordRepository) FindByID(id words.ID) (words.Word, error) {
+	var e models.Word
 	if err := r.db.First(&e, id).Error; err != nil {
-		return models.Word{}, err
+		return words.Word{}, err
 	}
-	return models.Word{
-		ID:        e.ID,
-		Word:      e.Word,
-		Meaning:   e.Meaning,
-		Example:   e.Example,
-		CreatedAt: e.CreatedAt.Unix(),
-		UpdatedAt: e.UpdatedAt.Unix(),
-	}, nil
+
+	id, err := words.NewIDFromString(e.ID)
+	if err != nil {
+		return words.Word{}, words.ErrInvalidWordID
+	}
+
+	word, err := words.ReconstructWord(id, e.Word, []words.Meaning{}, []words.Tag{})
+	if err != nil {
+		return words.Word{}, err
+	}
+	return word, nil
 }

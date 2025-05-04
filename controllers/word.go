@@ -27,19 +27,9 @@ func (c *WordController) GetWord(ctx echo.Context) error {
 		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "invalid id format"})
 	}
 
-	modelWord, err := c.wordRepository.FindByID(id)
+	word, err := c.wordRepository.FindByID(id)
 	if err != nil {
 		return ctx.JSON(http.StatusNotFound, map[string]string{"error": "word not found"})
-	}
-
-	meaning, err := wordModels.NewMeaning(modelWord.Meaning)
-	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to create meaning"})
-	}
-
-	word, err := wordModels.ReconstructWord(id, modelWord.Word, []wordModels.Meaning{meaning}, []wordModels.Tag{})
-	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to reconstruct word"})
 	}
 
 	return ctx.JSON(http.StatusOK, words.NewGetWordResponse(word))
