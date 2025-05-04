@@ -1,19 +1,13 @@
 package server
 
 import (
-	"lobmto-echo-example/controllers"
-
 	"github.com/labstack/echo/v4"
 )
 
-func NewRouter() *echo.Echo {
-	e := echo.New()
-
-	healthController := controllers.NewHealthController()
+func SetupRouter(e *echo.Echo, app *App) {
+	healthController := app.healthController
 	e.GET("/health", healthController.Check)
 
-	wordController := controllers.NewWordController()
+	wordController := app.wordController
 	e.GET("/words/:id", wordController.GetWord)
-
-	return e
 }

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"lobmto-echo-example/domain/repositories"
 	wordModels "lobmto-echo-example/model/words"
 	"lobmto-echo-example/responses/words"
 	"net/http"
@@ -9,10 +10,13 @@ import (
 )
 
 type WordController struct {
+	wordRepository repositories.WordRepository
 }
 
-func NewWordController() *WordController {
-	return &WordController{}
+func NewWordController(wordRepository repositories.WordRepository) *WordController {
+	return &WordController{
+		wordRepository: wordRepository,
+	}
 }
 
 func (c *WordController) GetWord(ctx echo.Context) error {
