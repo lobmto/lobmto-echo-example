@@ -11,4 +11,5 @@ func SetupRouter(e *echo.Echo, app *App) {
 	wordController := app.wordController
 	e.GET("/words/:id", wordController.GetWord)
 	e.POST("/words", wordController.PostWord)
+	e.DELETE("/words/:id", wordController.DeleteWord)
 }

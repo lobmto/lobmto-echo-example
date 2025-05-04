@@ -44,3 +44,7 @@ func (r wordRepository) Create(word words.Word) (words.Word, error) {
 	}
 	return word, nil
 }
+
+func (r wordRepository) Delete(word words.Word) error {
+	return r.db.Delete(&models.Word{}, word.ID().String()).Error
+}

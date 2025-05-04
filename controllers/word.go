@@ -55,3 +55,22 @@ func (c *WordController) PostWord(ctx echo.Context) error {
 
 	return ctx.JSON(http.StatusCreated, words.NewPostWordResponse(word))
 }
+
+func (c *WordController) DeleteWord(ctx echo.Context) error {
+	id, err := wordModels.NewIDFromString(ctx.Param("id"))
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "invalid id format"})
+	}
+
+	word, err := c.wordRepository.FindByID(id)
+	if err != nil {
+		return ctx.JSON(http.StatusNotFound, map[string]string{"error": "word not found"})
+	}
+
+	err = c.wordRepository.Delete(word)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to delete word"})
+	}
+
+	return ctx.JSON(http.StatusNoContent, nil)
+}
