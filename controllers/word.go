@@ -20,10 +20,27 @@ func NewWordController(wordRepository repositories.WordRepository) *WordControll
 }
 
 func (c *WordController) GetWord(ctx echo.Context) error {
-	// TODO: 実装
-	// TODO: エラーハンドリング
-	meaning, _ := wordModels.NewMeaning("単語")
-	word, _ := wordModels.NewWord("word", []wordModels.Meaning{meaning}, []wordModels.Tag{})
+	// TODO: ユースケース層が欲しい
+	// TODO: エラーハンドラーを整備して、JSON ではなくエラーを返すようにする
+	id, err := wordModels.NewIDFromString(ctx.Param("id"))
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "invalid id format"})
+	}
+
+	modelWord, err := c.wordRepository.FindByID(id)
+	if err != nil {
+		return ctx.JSON(http.StatusNotFound, map[string]string{"error": "word not found"})
+	}
+
+	meaning, err := wordModels.NewMeaning(modelWord.Meaning)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to create meaning"})
+	}
+
+	word, err := wordModels.ReconstructWord(id, modelWord.Word, []wordModels.Meaning{meaning}, []wordModels.Tag{})
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to reconstruct word"})
+	}
 
 	return ctx.JSON(http.StatusOK, words.NewGetWordResponse(word))
 }
