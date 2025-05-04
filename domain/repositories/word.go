@@ -6,4 +6,5 @@ import (
 
 type WordRepository interface {
 	FindByID(id words.ID) (words.Word, error)
+	Create(word words.Word) (words.Word, error)
 }

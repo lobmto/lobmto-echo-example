@@ -34,3 +34,24 @@ func (c *WordController) GetWord(ctx echo.Context) error {
 
 	return ctx.JSON(http.StatusOK, words.NewGetWordResponse(word))
 }
+
+func (c *WordController) PostWord(ctx echo.Context) error {
+	// TODO: ユースケース層が欲しい
+	// TODO: エラーハンドラーを整備して、JSON ではなくエラーを返すようにする
+	request := new(words.RegisterWordRequest)
+	if err := ctx.Bind(request); err != nil {
+		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request"})
+	}
+
+	word, err := words.NewPostWordModel(request)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "failed to create word"})
+	}
+
+	word, err = c.wordRepository.Create(word)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to create word"})
+	}
+
+	return ctx.JSON(http.StatusCreated, words.NewPostWordResponse(word))
+}

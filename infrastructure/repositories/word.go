@@ -33,3 +33,14 @@ func (r wordRepository) FindByID(id words.ID) (words.Word, error) {
 	}
 	return word, nil
 }
+
+func (r wordRepository) Create(word words.Word) (words.Word, error) {
+	e := models.Word{
+		ID:   word.ID().String(),
+		Word: word.Word(),
+	}
+	if err := r.db.Create(&e).Error; err != nil {
+		return words.Word{}, err
+	}
+	return word, nil
+}
