@@ -6,6 +6,7 @@
 - Go
 - echo
   - web framework
+- SQLite
 
 # 起動方法
 
