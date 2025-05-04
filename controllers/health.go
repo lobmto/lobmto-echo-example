@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"lobmto-echo-example/responses/health"
+	"lobmto-echo-example/http/health"
 	"net/http"
 
 	"github.com/labstack/echo/v4"

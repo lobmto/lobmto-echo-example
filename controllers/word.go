@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"lobmto-echo-example/domain/repositories"
+	"lobmto-echo-example/http/words"
 	wordModels "lobmto-echo-example/model/words"
-	"lobmto-echo-example/responses/words"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
