@@ -2,9 +2,8 @@ package repositories
 
 import (
 	"fmt"
-	"lobmto-echo-example/domain/repositories"
+	"lobmto-echo-example/domain/words"
 	"lobmto-echo-example/infrastructure/models"
-	"lobmto-echo-example/model/words"
 
 	"gorm.io/gorm"
 )
@@ -13,7 +12,7 @@ type wordRepository struct {
 	db *gorm.DB
 }
 
-func NewWordRepository(db *gorm.DB) repositories.WordRepository {
+func NewWordRepository(db *gorm.DB) words.WordRepository {
 	return wordRepository{db: db}
 }
 

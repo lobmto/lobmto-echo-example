@@ -1,19 +1,18 @@
 package controllers
 
 import (
-	"lobmto-echo-example/domain/repositories"
 	"lobmto-echo-example/http/words"
-	wordModels "lobmto-echo-example/model/words"
+	domain "lobmto-echo-example/domain/words"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 type WordController struct {
-	wordRepository repositories.WordRepository
+	wordRepository domain.WordRepository
 }
 
-func NewWordController(wordRepository repositories.WordRepository) *WordController {
+func NewWordController(wordRepository domain.WordRepository) *WordController {
 	return &WordController{
 		wordRepository: wordRepository,
 	}
@@ -22,7 +21,7 @@ func NewWordController(wordRepository repositories.WordRepository) *WordControll
 func (c *WordController) GetWord(ctx echo.Context) error {
 	// TODO: ユースケース層が欲しい
 	// TODO: エラーハンドラーを整備して、JSON ではなくエラーを返すようにする
-	id, err := wordModels.NewIDFromString(ctx.Param("id"))
+	id, err := domain.NewIDFromString(ctx.Param("id"))
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "invalid id format"})
 	}
@@ -57,7 +56,7 @@ func (c *WordController) PostWord(ctx echo.Context) error {
 }
 
 func (c *WordController) DeleteWord(ctx echo.Context) error {
-	id, err := wordModels.NewIDFromString(ctx.Param("id"))
+	id, err := domain.NewIDFromString(ctx.Param("id"))
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "invalid id format"})
 	}

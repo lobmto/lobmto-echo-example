@@ -1,7 +1,7 @@
 package words
 
 import (
-	"lobmto-echo-example/model/words"
+	"lobmto-echo-example/domain/words"
 )
 
 func NewGetWordResponse(word words.Word) *GetWordResponse {
