@@ -9,13 +9,13 @@ import (
 
 type App struct {
 	healthController *controllers.HealthController
-	wordController   *controllers.WordController
+	wordsController   *controllers.WordsController
 }
 
 func NewApp(db *gorm.DB) *App {
-	wordRepository := repositories.NewWordRepository(db)
+	wordsRepository := repositories.NewWordsRepository(db)
 	return &App{
 		healthController: controllers.NewHealthController(),
-		wordController:   controllers.NewWordController(wordRepository),
+		wordsController:   controllers.NewWordController(wordsRepository),
 	}
 }

@@ -8,7 +8,7 @@ func SetupRouter(e *echo.Echo, app *App) {
 	healthController := app.healthController
 	e.GET("/health", healthController.Check)
 
-	wordController := app.wordController
+	wordController := app.wordsController
 	e.GET("/words/:id", wordController.GetWord)
 	e.POST("/words", wordController.PostWord)
 	e.DELETE("/words/:id", wordController.DeleteWord)

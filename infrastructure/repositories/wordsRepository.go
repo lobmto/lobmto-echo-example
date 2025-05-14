@@ -8,15 +8,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type wordRepository struct {
+type wordsRepository struct {
 	db *gorm.DB
 }
 
-func NewWordRepository(db *gorm.DB) words.WordRepository {
-	return wordRepository{db: db}
+func NewWordsRepository(db *gorm.DB) words.WordsRepository {
+	return wordsRepository{db: db}
 }
 
-func (r wordRepository) FindByID(id words.ID) (words.Word, error) {
+func (r wordsRepository) FindByID(id words.ID) (words.Word, error) {
 	var e models.Word
 	if err := r.db.
 		Preload("Meanings").
@@ -46,7 +46,7 @@ func (r wordRepository) FindByID(id words.ID) (words.Word, error) {
 	return word, nil
 }
 
-func (r wordRepository) Create(word words.Word) (words.Word, error) {
+func (r wordsRepository) Create(word words.Word) (words.Word, error) {
 	meanings := make([]models.Meaning, len(word.MeaningList()))
 	for i, meaning := range word.MeaningList() {
 		meanings[i] = models.Meaning{
@@ -65,7 +65,7 @@ func (r wordRepository) Create(word words.Word) (words.Word, error) {
 	return word, nil
 }
 
-func (r wordRepository) Delete(word words.Word) error {
+func (r wordsRepository) Delete(word words.Word) error {
 	return r.db.
 		Select("Meanings").
 		Delete(&models.Word{
