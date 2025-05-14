@@ -1,0 +1,30 @@
+---
+description: 
+globs: main.yaml
+alwaysApply: false
+---
+# OpenAPI について
+
+OpenAPI は [main.yaml](mdc:openapi/main.yaml) に配置します。
+
+## 実装方針
+
+- RESTful に準拠
+- ID は原則 UUID とする
+- 基本データ型をcomponents/schemasに定義
+- リクエスト/レスポンスをcomponents内で再利用
+
+### components/schemas
+- 基本スキーマは単数形で定義する
+   - `id`, `word`
+- 配列は `{name}List` と定義する
+   - `meaningList`, `tagIdList`
+
+### components/requestBodies
+- components/schema を参照しつつ、リクエスト形式を定義する
+- required 指定を原則すべてに対して行うこと
+
+### components/responses
+- requestBodies と同様
+- エラーレスポンスも定義する
+  - `NotFoundResponse`, `NoContentResponse`

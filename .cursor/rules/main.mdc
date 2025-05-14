@@ -1,0 +1,55 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 概要
+
+Go 言語で書かれた echo 製の API サーバーです。
+
+
+# ディレクトリ構成
+
+```
+.
+├── controllers/         # コントローラー
+├── domain/              # ドメイン層
+│   └── words/           # 単語ドメイン
+├── http/                # HTTP関連
+│   ├── health/          # ヘルスチェックAPI
+│   └── words/           # 単語API
+├── infrastructure/      # インフラストラクチャ層
+│   ├── database/        # データベース接続
+│   ├── migration/       # マイグレーション
+│   ├── models/          # データモデル
+│   └── repositories/    # リポジトリ実装
+├── openapi/             # OpenAPI仕様
+├── server/              # サーバー設定
+├── main.go              # エントリーポイント
+└── test.db              # SQLiteデータベース
+```
+
+DDDアーキテクチャに従い、以下のレイヤーで構成されています：
+- **ドメイン層**: ビジネスロジックとドメインモデル
+- **インフラストラクチャ層**: 永続化機能や外部サービスとの連携
+- **アプリケーション層**: コントローラーが担当（TODO: コントローラから分離する）
+- **プレゼンテーション層**: HTTPハンドラーとOpenAPI仕様
+
+# 命名規則
+
+- **コントローラー**
+  - ファイル/インターフェースは `{name}Controller`（例: `WordsController`, `HealthController`）
+  - メソッドは動詞ベースで命名（例: `GetWord`, `PostWord`, `DeleteWord`）
+
+- **リポジトリ**: 
+  - ファイル/インターフェースは `{name}Repository`形式で命名（例: `WordsRepository`）
+  - メソッドはCRUD操作に対応（例: `FindByID`, `Create`, `Delete`）
+
+- **ドメインエンティティ**: 
+  - ファイル/インターフェースは単数形の名詞（例: `Word`, `Meaning`, `Tag`）
+  - ファクトリメソッドは`New{name}`形式（例: `NewWord`, `NewMeaning`）
+  - 再構築用メソッドは`Reconstruct{name}`形式（例: `ReconstructWord`）
+
+- **値オブジェクト**:
+  - ファイル/インターフェースは単数形の名詞で命名（例: `ID`, `Meaning`）
+  - 不変性を保持し、等価性比較のための`Equals`メソッドを提供
